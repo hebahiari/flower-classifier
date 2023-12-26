@@ -95,7 +95,7 @@ const ImageUpload = () => {
             </ul></div>)}
           {predictions && selectedFile && (
             <div className="selected-image-container">
-              <h3>Selected Image:</h3>
+              <h4>Selected Image:</h4>
               <img
                 src={URL.createObjectURL(selectedFile)}
                 alt="Selected"
@@ -106,12 +106,7 @@ const ImageUpload = () => {
 
           {predictions && (
             <div>
-              <h3>Predictions:</h3>
-              {/* Display a warning if the highest predicted probability is less than 50% */}
-              {predictions.probabilities[0] < 50 ? (
-                <p>Warning: This may not be a recognized flower.</p>
-              ) : null}
-
+              <h4>Predictions:</h4>
               {/* Bar chart for displaying prediction probabilities */}
               <Bar
                 data={{
@@ -120,7 +115,7 @@ const ImageUpload = () => {
                     {
                       label: 'Probability',
                       data: predictions.probabilities,
-                      backgroundColor: 'black',
+                      backgroundColor: '#9BD0F5',
                       barThickness: 25,
                     },
                   ],
@@ -133,10 +128,11 @@ const ImageUpload = () => {
                       labels: predictions.classes.map(label => label.toUpperCase()),
                     },
                     x: {
+                      min: 0,
+                      max: 100,
                       ticks: {
                         beginAtZero: true,
-                        min: 0,
-                        max: 100,
+
                       },
                     },
                   },
@@ -150,21 +146,26 @@ const ImageUpload = () => {
                       text: 'Top 5 Predictions',
                     },
                     datalabels: {
-                      anchor: 'end',
+                      color: 'black',
+                      anchor: 'start',
                       align: 'end',
                       formatter: (value, context) => {
-                        return value + '%';
-                      }
-            
-                    }
-                },
-                
+                        return value.toFixed(1) + '%';
+                      },
+                      offset: 5,
+                    },
+                  },
                 }}
                 height={300}
                 width={400}
               />
+              {/* Display a warning if the highest predicted probability is less than 50% */}
+              {predictions.probabilities[0] < 50 ? (
+                <p style={{ margin: 0 }}>Warning: This may not be a recognized flower.</p>
+              ) : null}
             </div>
           )}
+
         </div>
       </div>
     </div>
