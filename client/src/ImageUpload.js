@@ -3,11 +3,12 @@ import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { CategoryScale, LinearScale, Chart, BarElement } from 'chart.js';
+import ChartDataLabels from 'chartjs-plugin-datalabels';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import "./ImageUpload.css"
 
 // Registering necessary Chart.js components
-Chart.register(CategoryScale, LinearScale, BarElement);
+Chart.register(CategoryScale, LinearScale, BarElement, ChartDataLabels);
 
 const ImageUpload = () => {
 
@@ -55,7 +56,7 @@ const ImageUpload = () => {
 
 
   return (
-    <div className='container-fluid d-flex flex-row justify-content-start'>
+    <div className='container-fluid d-flex flex-row justify-content-start p-0 main-container'>
       <div className="description-box">
         <p>
           Welcome to the Flower Type Classifier — an intelligent image recognition system! Our application employs a
@@ -67,16 +68,8 @@ const ImageUpload = () => {
           Convolutional Neural Networks (CNNs). These networks are designed to understand and recognize intricate
           patterns in images, ensuring the Flower Type Classifier is both accurate and efficient.
         </p>
-        <p>
-          <strong>How It Works:</strong>
-        </p>
-        <ul>
-          <li><strong>Upload Image:</strong> Select an image of a flower you'd like to identify.</li>
-          <li><strong>Predict:</strong> Click the "Predict" button to let the model analyze the image.</li>
-          <li><strong>View Results:</strong> Instantly receive the top 5 predictions with corresponding probabilities.</li>
-        </ul>
-      </div>
 
+      </div>
 
       <div className="container mt-5 text-center">
         <h1 className="mb-4">Flower Type Classifier</h1>
@@ -90,8 +83,16 @@ const ImageUpload = () => {
         </div>
 
         {/* Display selected image and prediction results */}
-        <div className="d-flex flex-wrap justify-content-center gap-5">
+        <div className="d-flex flex-wrap justify-content-center gap-3">
           {uploadWarning && <p>Please upload an image first.</p>}
+          {!predictions && (<div style={{ textAlign: "left", maxWidth: "500px" }}> <p>
+            <strong>How It Works:</strong>
+          </p>
+            <ul>
+              <li><strong>Upload Image:</strong> Select an image of a flower you'd like to identify.</li>
+              <li><strong>Predict:</strong> Click the "Predict" button to let the model analyze the image.</li>
+              <li><strong>View Results:</strong> Instantly receive the top 5 predictions with corresponding probabilities.</li>
+            </ul></div>)}
           {predictions && selectedFile && (
             <div className="selected-image-container">
               <h3>Selected Image:</h3>
@@ -119,7 +120,7 @@ const ImageUpload = () => {
                     {
                       label: 'Probability',
                       data: predictions.probabilities,
-                      backgroundColor: 'blue',
+                      backgroundColor: 'black',
                       barThickness: 25,
                     },
                   ],
@@ -148,7 +149,16 @@ const ImageUpload = () => {
                       display: true,
                       text: 'Top 5 Predictions',
                     },
-                  },
+                    datalabels: {
+                      anchor: 'end',
+                      align: 'end',
+                      formatter: (value, context) => {
+                        return value + '%';
+                      }
+            
+                    }
+                },
+                
                 }}
                 height={300}
                 width={400}
