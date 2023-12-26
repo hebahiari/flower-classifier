@@ -10,19 +10,29 @@ import "./ImageUpload.css"
 Chart.register(CategoryScale, LinearScale, BarElement);
 
 const ImageUpload = () => {
+
   const [selectedFile, setSelectedFile] = useState(null);
   const [predictions, setPredictions] = useState(null);
+  const [uploadWarning, setUploadWarning] = useState(false);
 
   // Event handler for when the user selects a new file
   const handleFileChange = (e) => {
     // Reset predictions and set the newly selected file
     setPredictions(null);
     setSelectedFile(e.target.files[0]);
+    // Reset the upload warning when a new file is selected
+    setUploadWarning(false);
   };
 
   // Event handler for form submission to make predictions
   const handleSubmit = async (e) => {
     e.preventDefault();
+
+    // Check if there is a selected file
+    if (!selectedFile) {
+      setUploadWarning(true);
+      return;
+    }
 
     // Create a FormData object and append the selected image file
     const formData = new FormData();
@@ -43,32 +53,30 @@ const ImageUpload = () => {
     }
   };
 
+
   return (
     <div className='container-fluid d-flex flex-row justify-content-start'>
       <div className="description-box">
         <p>
-          Welcome to the Flower Type Classifier, an intelligent image recognition system! This application uses a
+          Welcome to the Flower Type Classifier — an intelligent image recognition system! Our application employs a
           state-of-the-art deep learning model trained on a diverse dataset of flower images. By leveraging advanced
-          neural network architectures, it can accurately identify and categorize various flower types.
-        </p>
-        <p>
-          Behind the Scenes:
+          neural network architectures, it accurately identifies and categorizes various flower types.
         </p>
         <p>
           The underlying model has been trained using advanced deep learning techniques, specifically leveraging
           Convolutional Neural Networks (CNNs). These networks are designed to understand and recognize intricate
-          patterns in images, making our Flower Type Classifier accurate and efficient.
-        </p><p>
-          How It Works:
+          patterns in images, ensuring the Flower Type Classifier is both accurate and efficient.
+        </p>
+        <p>
+          <strong>How It Works:</strong>
         </p>
         <ul>
-          <li>Upload Image: Select an image of a flower you'd like to identify.</li>
-          <li>Predict: Click the "Predict" button to let the model analyze the image.</li>
-          <li>View Results: Instantly receive the top 5 predictions with corresponding probabilities.
-          </li>
+          <li><strong>Upload Image:</strong> Select an image of a flower you'd like to identify.</li>
+          <li><strong>Predict:</strong> Click the "Predict" button to let the model analyze the image.</li>
+          <li><strong>View Results:</strong> Instantly receive the top 5 predictions with corresponding probabilities.</li>
         </ul>
-
       </div>
+
 
       <div className="container mt-5 text-center">
         <h1 className="mb-4">Flower Type Classifier</h1>
@@ -82,7 +90,8 @@ const ImageUpload = () => {
         </div>
 
         {/* Display selected image and prediction results */}
-        <div className="d-flex justify-content-center gap-5">
+        <div className="d-flex flex-wrap justify-content-center gap-5">
+          {uploadWarning && <p>Please upload an image first.</p>}
           {predictions && selectedFile && (
             <div className="selected-image-container">
               <h3>Selected Image:</h3>
