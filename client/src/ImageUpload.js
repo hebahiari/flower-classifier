@@ -1,5 +1,12 @@
 import React, { useState } from 'react';
 import axios from 'axios';
+import { Bar } from 'react-chartjs-2';
+import { CategoryScale, LinearScale, Chart, BarElement } from "chart.js";
+
+Chart.register(CategoryScale);
+Chart.register(LinearScale);
+Chart.register(BarElement);
+
 
 const ImageUpload = () => {
     const [selectedFile, setSelectedFile] = useState(null);
@@ -35,16 +42,57 @@ const ImageUpload = () => {
                 <input type="file" onChange={handleFileChange} accept="image/*" />
                 <button type="submit">Predict</button>
             </form>
+            {selectedFile && (
+                <div>
+                    <h2>Selected Image:</h2>
+                    <img
+                        src={URL.createObjectURL(selectedFile)}
+                        alt="Selected"
+                        style={{ maxWidth: '100%', maxHeight: '400px' }}
+                    />
+                </div>
+            )}
             {predictions && (
                 <div>
                     <h2>Predictions:</h2>
-                    <ul>
-                        {predictions.classes.map((className, index) => (
-                            <li key={index}>
-                                {className}: {predictions.probabilities[index]}
-                            </li>
-                        ))}
-                    </ul>
+                    <Bar
+                        data={{
+                            labels: predictions.classes,
+                            datasets: [
+                                {
+                                    label: 'Probability',
+                                    data: predictions.probabilities,
+                                    backgroundColor: 'blue',
+                                },
+                            ],
+                        }}
+                        options={{
+                            scales: {
+                                xAxes: [
+                                    {
+                                        type: 'category',
+                                        labels: predictions.classes,
+                                    },
+                                ],
+                                yAxes: [
+                                    {
+                                        ticks: {
+                                            beginAtZero: true,
+                                        },
+                                    },
+                                ],
+                            },
+                            plugins: {
+                                legend: {
+                                    display: false,
+                                },
+                                title: {
+                                    display: true,
+                                    text: 'Top 5 Predictions',
+                                },
+                            },
+                        }}
+                    />
                 </div>
             )}
         </div>
