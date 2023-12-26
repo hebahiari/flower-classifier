@@ -10,132 +10,148 @@ import "./ImageUpload.css"
 Chart.register(CategoryScale, LinearScale, BarElement);
 
 const ImageUpload = () => {
-    const [selectedFile, setSelectedFile] = useState(null);
-    const [predictions, setPredictions] = useState(null);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [predictions, setPredictions] = useState(null);
 
-    // Event handler for when the user selects a new file
-    const handleFileChange = (e) => {
-        // Reset predictions and set the newly selected file
-        setPredictions(null);
-        setSelectedFile(e.target.files[0]);
-    };
+  // Event handler for when the user selects a new file
+  const handleFileChange = (e) => {
+    // Reset predictions and set the newly selected file
+    setPredictions(null);
+    setSelectedFile(e.target.files[0]);
+  };
 
-    // Event handler for form submission to make predictions
-    const handleSubmit = async (e) => {
-        e.preventDefault();
+  // Event handler for form submission to make predictions
+  const handleSubmit = async (e) => {
+    e.preventDefault();
 
-        // Create a FormData object and append the selected image file
-        const formData = new FormData();
-        formData.append('image', selectedFile);
+    // Create a FormData object and append the selected image file
+    const formData = new FormData();
+    formData.append('image', selectedFile);
 
-        try {
-            // Send a POST request to the prediction endpoint
-            const response = await axios.post('http://localhost:5000/predict', formData, {
-                headers: {
-                    'Content-Type': 'multipart/form-data',
-                },
-            });
+    try {
+      // Send a POST request to the prediction endpoint
+      const response = await axios.post('http://localhost:5000/predict', formData, {
+        headers: {
+          'Content-Type': 'multipart/form-data',
+        },
+      });
 
-            // Update state with the prediction results
-            setPredictions(response.data);
-        } catch (error) {
-            console.error('Error occurred during prediction:', error);
-        }
-    };
+      // Update state with the prediction results
+      setPredictions(response.data);
+    } catch (error) {
+      console.error('Error occurred during prediction:', error);
+    }
+  };
 
-    return (
-      <div className="container-fluid d-flex">
-        {/* Fixed box on the left side */}
-        <div className="fixed-box">
-          <h2>About Flower Type Classifier</h2>
-          <p>
-            Welcome to the Flower Type Classifier, an intelligent image recognition system! This application uses a
-            state-of-the-art deep learning model trained on a diverse dataset of flower images.
-          </p>
-          <p>
-            Start exploring the fascinating world of flowers with our Flower Type Classifier today!
-          </p>
+  return (
+    <div className='container-fluid d-flex flex-row justify-content-start'>
+      <div className="description-box">
+        <p>
+          Welcome to the Flower Type Classifier, an intelligent image recognition system! This application uses a
+          state-of-the-art deep learning model trained on a diverse dataset of flower images. By leveraging advanced
+          neural network architectures, it can accurately identify and categorize various flower types.
+        </p>
+        <p>
+          Behind the Scenes:
+        </p>
+        <p>
+          The underlying model has been trained using advanced deep learning techniques, specifically leveraging
+          Convolutional Neural Networks (CNNs). These networks are designed to understand and recognize intricate
+          patterns in images, making our Flower Type Classifier accurate and efficient.
+        </p><p>
+          How It Works:
+        </p>
+        <ul>
+          <li>Upload Image: Select an image of a flower you'd like to identify.</li>
+          <li>Predict: Click the "Predict" button to let the model analyze the image.</li>
+          <li>View Results: Instantly receive the top 5 predictions with corresponding probabilities.
+          </li>
+        </ul>
+
+      </div>
+
+      <div className="container mt-5 text-center">
+        <h1 className="mb-4">Flower Type Classifier</h1>
+
+        {/* Form for file upload and prediction */}
+        <div className="d-flex justify-content-center mb-4">
+          <form onSubmit={handleSubmit} className="d-flex gap-3">
+            <input type="file" className="form-control" onChange={handleFileChange} accept="image/*" />
+            <button type="submit" className="btn btn-primary">Predict</button>
+          </form>
         </div>
-  
-        {/* Main content on the right side */}
-        <div className="flex-grow-1 mt-5 text-center main-content">
-          <h1 className="mb-4">Flower Type Classifier</h1>
-  
-          {/* Form for image upload */}
-          <div className="d-flex justify-content-center mb-4">
-            <form onSubmit={handleSubmit} className="d-flex gap-3">
-              <input type="file" className="form-control" onChange={handleFileChange} accept="image/*" />
-              <button type="submit" className="btn btn-primary">
-                Predict
-              </button>
-            </form>
-          </div>
-  
-          {/* Selected image and predictions */}
-          <div className="d-flex justify-content-center gap-5">
-            {/* Display selected image if available */}
-            {predictions && selectedFile && (
-              <div className="selected-image-container">
-                <h3>Selected Image:</h3>
-                <img src={URL.createObjectURL(selectedFile)} alt="Selected" className="selected-image" />
-              </div>
-            )}
-  
-            {/* Display predictions if available */}
-            {predictions && (
-              <div>
-                <h3>Predictions:</h3>
-                {predictions.probabilities[0] < 50 ? (
-                  <p>Warning: Object does not seem to be a recognized flower.</p>
-                ) : null}
-                {/* Bar chart for predictions */}
-                <Bar
-                  data={{
-                    labels: predictions.classes.map((label) => label.toUpperCase()),
-                    datasets: [
-                      {
-                        label: 'Probability',
-                        data: predictions.probabilities,
-                        backgroundColor: 'blue',
-                        barThickness: 25,
-                      },
-                    ],
-                  }}
-                  options={{
-                    indexAxis: 'y',
-                    scales: {
-                      y: {
-                        type: 'category',
-                        labels: predictions.classes.map((label) => label.toUpperCase()),
-                      },
-                      x: {
-                        ticks: {
-                          beginAtZero: true,
-                          min: 0,
-                          max: 100,
-                        },
+
+        {/* Display selected image and prediction results */}
+        <div className="d-flex justify-content-center gap-5">
+          {predictions && selectedFile && (
+            <div className="selected-image-container">
+              <h3>Selected Image:</h3>
+              <img
+                src={URL.createObjectURL(selectedFile)}
+                alt="Selected"
+                className="selected-image"
+              />
+            </div>
+          )}
+
+          {predictions && (
+            <div>
+              <h3>Predictions:</h3>
+              {/* Display a warning if the highest predicted probability is less than 50% */}
+              {predictions.probabilities[0] < 50 ? (
+                <p>Warning: This may not be a recognized flower.</p>
+              ) : null}
+
+              {/* Bar chart for displaying prediction probabilities */}
+              <Bar
+                data={{
+                  labels: predictions.classes.map(label => label.toUpperCase()),
+                  datasets: [
+                    {
+                      label: 'Probability',
+                      data: predictions.probabilities,
+                      backgroundColor: 'blue',
+                      barThickness: 25,
+                    },
+                  ],
+                }}
+                options={{
+                  indexAxis: 'y',
+                  scales: {
+                    y: {
+                      type: 'category',
+                      labels: predictions.classes.map(label => label.toUpperCase()),
+                    },
+                    x: {
+                      ticks: {
+                        beginAtZero: true,
+                        min: 0,
+                        max: 100,
                       },
                     },
-                    responsive: true,
-                    plugins: {
-                      legend: {
-                        position: 'right',
-                      },
-                      title: {
-                        display: true,
-                        text: 'Top 5 Predictions',
-                      },
+                  },
+                  responsive: true,
+                  plugins: {
+                    legend: {
+                      position: 'right',
                     },
-                  }}
-                  height={300}
-                  width={400}
-                />
-              </div>
-            )}
-          </div>
+                    title: {
+                      display: true,
+                      text: 'Top 5 Predictions',
+                    },
+                  },
+                }}
+                height={300}
+                width={400}
+              />
+            </div>
+          )}
         </div>
       </div>
-    );
+    </div>
+
+
+  );
 };
 
 export default ImageUpload;
