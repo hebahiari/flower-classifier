@@ -2,12 +2,12 @@
 
 .description-box {
     background-color: #f5f5f5;
-    padding: 30px;
-    width: 500px;
+    padding: 25px;
+    width: 550px;
     height: 100vw;
     border: 1px solid #ddd;
     text-align: left;
-    font-size: 15px;
+    font-size: 12px;
     height: 100vh;
 }
 

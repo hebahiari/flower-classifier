@@ -58,16 +58,35 @@ const ImageUpload = () => {
   return (
     <div className='container-fluid d-flex flex-row justify-content-start p-0 main-container'>
       <div className="description-box">
-        <p>
-          Welcome to the Flower Type Classifier — an intelligent image recognition system! Our application employs a
-          state-of-the-art deep learning model trained on a diverse dataset of flower images. By leveraging advanced
-          neural network architectures, it accurately identifies and categorizes various flower types.
-        </p>
-        <p>
-          The underlying model has been trained using advanced deep learning techniques, specifically leveraging
-          Convolutional Neural Networks (CNNs). These networks are designed to understand and recognize intricate
-          patterns in images, ensuring the Flower Type Classifier is both accurate and efficient.
-        </p>
+      <h3>Flower Image Classification Project Overview</h3>
+
+<h6>Project Details:</h6>
+<p>
+    Developed an image classification project using PyTorch to recognize 102 flower species. Achieved through data
+    preparation, VGG11 model selection, classifier design, model training, and checkpoint saving. Implemented inference
+    for new image predictions and performed sanity checks for validation.
+</p>
+
+<h6>Technologies Used:</h6>
+<p>
+    Python (v3.6), 
+    PyTorch (v1.0.0), 
+    Matplotlib, 
+    PIL
+</p>
+
+<h6>Achievements:</h6>
+<ul>
+    <li>Trained a deep learning model for flower classification.</li>
+    <li>Utilized transfer learning with a pre-trained VGG11 model.</li>
+    <li>Demonstrated expertise in data preprocessing and model evaluation.</li>
+    <li>Created an efficient inference pipeline for real-world predictions.</li>
+</ul>
+
+<p>
+    This project showcases end-to-end machine learning capabilities, highlighting technical skills in model development
+    and the potential for real-world deployment.
+</p>
 
       </div>
 
