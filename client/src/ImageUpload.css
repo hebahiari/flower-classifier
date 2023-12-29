@@ -1,14 +1,25 @@
 
+.main-container {
+    display: grid;
+    grid-template-columns: 1fr auto;
+    height: 100vh;
+  }
+
+.prediction-box{
+    margin-left: 400px;
+}
 
 .description-box {
     background-color: #f5f5f5;
     padding: 25px;
-    width: 550px;
+    width: 400px;
     height: 100vw;
     border: 1px solid #ddd;
     text-align: left;
     font-size: 12px;
     height: 100vh;
+    overflow-y: auto;
+    position: fixed;
 }
 
 .selected-image-container {
