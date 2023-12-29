@@ -42,7 +42,7 @@ const ImageUpload = () => {
   };
 
   return (
-    <div className="container-fluid d-flex flex-row justify-content-start  main-container p-0">
+    <div className="container-fluid d-flex flex-row flex-wrap justify-content-start main-container p-0">
       <div className="description-box p-4">
         <h3 className="text-primary mb-4">Flower Image Classification Project Overview</h3>
 
@@ -69,7 +69,7 @@ const ImageUpload = () => {
         </p>
       </div>
 
-      <div className="container mt-5 text-center prediction-box mb-5">
+      <div className="prediction-box text-center">
         <h1 className="mb-4">Flower Type Classifier</h1>
 
         {/* Form for file upload and prediction */}
@@ -82,7 +82,7 @@ const ImageUpload = () => {
           {uploadWarning && <p className="text-danger">Please upload an image first.</p>}
 
         {/* Display selected image and prediction results */}
-        <div className="d-flex flex-wrap justify-content-center gap-3">
+        <div className="data d-flex flex-wrap justify-content-center gap-3">
           {!predictions && (
             <div className="alert alert-info p-4" style={{ textAlign: "left", maxWidth: "500px", borderRadius: "10px" }}>
               <p>
