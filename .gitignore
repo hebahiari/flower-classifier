@@ -2,3 +2,4 @@ server/checkpoint.pth
 server/temp_image.jpg
 client/node_modules
 
+client/.env

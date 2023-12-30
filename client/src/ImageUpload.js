@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import axios from 'axios';
 import { Bar } from 'react-chartjs-2';
 import { CategoryScale, LinearScale, Chart, BarElement } from 'chart.js';
@@ -31,7 +31,8 @@ const ImageUpload = () => {
     formData.append('image', selectedFile);
 
     try {
-      const response = await axios.post('http://localhost:5000/predict', formData, {
+      console.log(process.env.REACT_APP_API)
+      const response = await axios.post(process.env.REACT_APP_API, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
 
