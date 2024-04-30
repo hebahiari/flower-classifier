@@ -10,7 +10,6 @@ with open('cat_to_name.json', 'r') as f:
 app = Flask(__name__)
 CORS(app)
 
-# Load your trained model checkpoint
 model = load_checkpoint("checkpoint.pth")
 
 @app.route('/')
@@ -28,20 +27,16 @@ def predict_image():
         return jsonify({'error': 'No selected file'})
 
     if file:
-        image_path = "temp_image.jpg"  # Save the uploaded image temporarily
+        image_path = "temp_image.jpg"  
         file.save(image_path)
 
-        # Process and predict using the loaded model
         image = process_image(image_path)
         probabilities, classes = predict(image, model, topk=5)
 
-        # Convert class indices to class names
         class_names = [cat_to_name[str(class_idx)] for class_idx in classes]
 
-        # Convert probabilities to percentages
         probabilities_percentage = [round(prob * 100, 2) for prob in probabilities]
 
-        # Return predictions as JSON
         return jsonify({'probabilities': probabilities_percentage, 'classes': class_names})
 
 if __name__ == '__main__':

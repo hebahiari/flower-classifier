@@ -5,6 +5,7 @@ import { CategoryScale, LinearScale, Chart, BarElement } from 'chart.js';
 import ChartDataLabels from 'chartjs-plugin-datalabels';
 import 'bootstrap/dist/css/bootstrap.min.css';
 import './ImageUpload.css';
+import Loading from './Loading';
 
 Chart.register(CategoryScale, LinearScale, BarElement, ChartDataLabels);
 
@@ -12,6 +13,7 @@ const ImageUpload = () => {
   const [selectedFile, setSelectedFile] = useState(null);
   const [predictions, setPredictions] = useState(null);
   const [uploadWarning, setUploadWarning] = useState(false);
+  const [loading, setLoading] = useState(false)
 
   const handleFileChange = (e) => {
     setPredictions(null);
@@ -21,9 +23,11 @@ const ImageUpload = () => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setLoading(true)
 
     if (!selectedFile) {
       setUploadWarning(true);
+      setLoading(false)
       return;
     }
 
@@ -31,7 +35,6 @@ const ImageUpload = () => {
     formData.append('image', selectedFile);
 
     try {
-      console.log(process.env.REACT_APP_API)
       const response = await axios.post(process.env.REACT_APP_API, formData, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
@@ -40,7 +43,10 @@ const ImageUpload = () => {
     } catch (error) {
       console.error('Error occurred during prediction:', error);
     }
+    setLoading(false)
   };
+
+
 
   return (
     <div className="container-fluid d-flex flex-row flex-wrap justify-content-start main-container p-0">
@@ -73,18 +79,16 @@ const ImageUpload = () => {
       <div className="prediction-box text-center">
         <h1 className="mb-4">Flower Type Classifier</h1>
 
-        {/* Form for file upload and prediction */}
         <div className="d-flex justify-content-center mb-4">
           <form onSubmit={handleSubmit} className="d-flex gap-3">
             <input type="file" className="form-control" onChange={handleFileChange} accept="image/*" />
             <button type="submit" className="btn btn-primary">Predict</button>
           </form>
         </div>
-          {uploadWarning && <p className="text-danger">Please upload an image first.</p>}
+        {uploadWarning && <p className="text-danger">Please upload an image first.</p>}
 
-        {/* Display selected image and prediction results */}
         <div className="data d-flex flex-wrap justify-content-center gap-3">
-          {!predictions && (
+          {!predictions && !loading && (
             <div className="alert alert-info p-4" style={{ textAlign: "left", maxWidth: "500px", borderRadius: "10px" }}>
               <p>
                 <strong className="text-primary">How It Works:</strong>
@@ -96,6 +100,8 @@ const ImageUpload = () => {
               </ul>
             </div>
           )}
+
+          {loading && <Loading />}
 
           {predictions && selectedFile && (
             <div className="selected-image-container rounded">
