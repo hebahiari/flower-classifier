@@ -1,6 +1,7 @@
-Pillow==10.1.0
-Requests==2.31.0
-torch==2.1.2
-torchvision==0.16.2
+Pillow
+Requests
+torch
+torchvision
 flask
 flask_cors
+matplotlib

@@ -36,7 +36,10 @@ const ImageUpload = () => {
 
     try {
       const response = await axios.post(process.env.REACT_APP_API, formData, {
-        headers: { 'Content-Type': 'multipart/form-data' },
+        headers: {
+          'Content-Type': 'multipart/form-data',
+          'Access-Control-Allow-Origin': "*"
+        },
       });
 
       setPredictions(response.data);

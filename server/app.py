@@ -12,10 +12,6 @@ CORS(app)
 
 model = load_checkpoint("checkpoint.pth")
 
-@app.route('/')
-def index():
-    return render_template('index.html')
-
 @app.route('/predict', methods=['POST'])
 def predict_image():
     if 'image' not in request.files:
@@ -40,4 +36,4 @@ def predict_image():
         return jsonify({'probabilities': probabilities_percentage, 'classes': class_names})
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=False, host="0.0.0.0")
